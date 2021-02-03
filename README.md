@@ -1,3 +1,4 @@
+# Neural Network Solver for Differential Equations
 Implementation of the solver of differential equations presented by Lagaris et. al. ([see original paper](https://doi.org/10.1109/72.712178)).  
 This method has the advantages of:
   * providing a meshless solution to ordinary and partial differential equations;
