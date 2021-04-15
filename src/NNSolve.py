@@ -70,20 +70,42 @@ Approx, DApprox = model.phi(x)
 Approx = np.array(Approx).reshape((x.shape))
 DApprox = np.array(DApprox).reshape((x.shape))
 
-plt.subplot(121)
-plt.plot(x,Approx, label="Neural Network's solution")
-plt.plot(x,Sol, label="Exact Solution")
+fig = plt.figure()
+
+ax1 = fig.add_subplot(211)
+plt.plot(x,Approx, label="Numerical")
+plt.plot(x,Sol, label="Analytical")
+E = abs(Approx-Sol)**2
+L2_norm = np.sum(E)
+H2_norm = L2_norm
+ax1.title.set_text("L2 error on solution: {}".format(np.sqrt(L2_norm)))
 plt.legend()
 
+# Compute derivatives of analytical solution and
+# network's solution (for comparison purpose)
+# using finite differences
 h = np.finfo(np.float64).eps
 h = 2.0*np.sqrt(h)
 dSol = (Solution(x+h)-Solution(x-h))/(2*h)
-plt.subplot(122)
-plt.plot(x,DApprox, label="Neural Network's solution")
-plt.plot(x,dSol, label="Exact Solution")
+
+FD_Approx, _ = model.phi(x+h)
+FD_Approx = (FD_Approx -Approx)/h
+
+Derivative_Discrepancy = np.sum((FD_Approx - DApprox)**2)
+
+ax2 = fig.add_subplot(212)
+plt.plot(x,DApprox, label="Derivative of network's solution")
+plt.plot(x,FD_Approx, label="Derivative by finite difference") 
+plt.plot(x,dSol, label="Analytical")
+E = abs(DApprox-dSol)**2
+L2_norm = np.sum(E)
+ax2.title.set_text("L2 error on derivative estimates: {}".format(np.sqrt(Derivative_Discrepancy)))
+                                                                         
+
+H2_norm += L2_norm
+plt.suptitle("H2 error: {}\nSolver residual: {}".format(H2_norm, model.Optimized.fun))
 plt.legend()
 
 plt.show()
-
 print(model.Optimized)
 

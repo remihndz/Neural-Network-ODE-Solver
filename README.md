@@ -20,3 +20,5 @@ For a discrete set of points S in Ω, the network's parameters σ are trained to
 <p align="center">
 <img src="https://latex.codecogs.com/png.latex?%5Cdpi%7B100%7D%20%5Clarge%20%5CLarge%20J%28%5Csigma%29%20%3D%20%5Csum_%7B%5Cvec%20x%5Cin%20S%7D%20G%28%5Cvec%20x%2C%20%5Cphi%28%5Cvec%20x%29%2C%20%5Cnabla%5Cphi%28%5Cvec%20x%29%2C%20%5Cnabla%5E2%5Cphi%28%5Cvec%20x%29%29%5E2">
 </p>
+
+Solving the minimization problem can be problematic because of the presence of local minima. For more complicated problem or better accuracy, a random walk on the parameter space for the initial guess may be useful to prevent falling in such pitfall.
