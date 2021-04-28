@@ -113,19 +113,21 @@ class Model:
     def _cost(self, thetas, training_set):
 
         cost = 0.0
+        N = 0
         for x in training_set:
             phi,dphi = self._phi(x,thetas)
             cost += (dphi-self._f(x,phi))**2
+            N+=1
         return cost
 
     def fit(self, training_set):
         self._make_thetas((1,)+self._hidden_layers + (1,))
-
         optimized = minimize(fun=self._cost, x0=self.thetas, args=(training_set),
                              method=self._method, options={'maxiter':self._max_iter})
 
         self.thetas = optimized.x
         self.Optimized = optimized
+        self.residual  = optimized.fun 
 
     def phi(self, X):
 
