@@ -40,4 +40,4 @@ Letting *q* be the size of the (single) hidden layer in the network and *n* the 
 ![alt text](https://github.com/remihndz/Neural-Network-ODE-Solver/blob/main/img/Error_width.png)
 
 and *e<sup>-c√n</sup>*
-![alt text](https://github.com/remihndz/Neural-Network-ODE-Solver/blob/main/img/Errorₜrainingₛet.png)
+![alt text](https://github.com/remihndz/Neural-Network-ODE-Solver/blob/main/img/Error_training_set.png)
