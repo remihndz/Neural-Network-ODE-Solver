@@ -54,6 +54,6 @@ plt.semilogy(Number_of_Training_Pts, Loss_error,
              'r+--', linewidth=2, markersize=8)
 
 plt.xlabel('n', fontsize=15)
-plt.legend([r'$L^2$ norm', r'$O(e^{-c\sqrt{n}})$',r'$\mathcal{L}\varphi_t-f$'], fontsize=12)
+plt.legend([r'$||\varphi_t-\varphi_a||_{L^2}$', r'$O(e^{-c\sqrt{n}})$',r'$\mathcal{L}\varphi_t-f$'], fontsize=12)
 plt.title('Convergence w.r.t. # of training points', fontsize=15)
 plt.show()
