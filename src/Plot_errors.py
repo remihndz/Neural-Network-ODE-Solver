@@ -24,9 +24,9 @@ plt.semilogy(q_plot, error_th, 'k', linewidth=2)
 
 plt.semilogy(width, Loss_error, 'r+--', linewidth=2, markersize=8)
 
-plt.legend([r'$||\Psi_t-\Psi_a||_{L^2}$', r'Theoretical $O(q^{-1/2})$', r'$\mathcal{L}\Psi_t-f$'])
-plt.title('Convergence w.r.t. the width of the network')
-plt.xlabel('q')
+plt.legend([r'$||\varphi_t-\varphi_a||_{L^2}$', r'Theoretical $O(q^{-1/2})$', r'$\mathcal{L}\varphi_t-f$'], fontsize=12)
+plt.title('Convergence w.r.t.\nthe width of the network', fontsize=15)
+plt.xlabel('q', fontsize=15)
 
 
 
@@ -39,9 +39,11 @@ Loss_error = Error_n[:,2]
 fig2 = plt.figure(2)
 
 def exponential_decay(n, a,b):
-    return a*np.exp(b*n)
-a, b = L2_error[0], np.log(L2_error[-1]/L2_error[0])/(Error_n[-1,0]-Error_n[0,0])
-p_opt = [a,b]
+    return a*np.exp(b*np.sqrt(n))
+# a, b = L2_error[0], np.log(L2_error[-1]/L2_error[0])/(Error_n[-1,0]-Error_n[0,0])
+# p_opt = [a,b]
+
+p_opt, _ = curve_fit(exponential_decay, Number_of_Training_Pts, L2_error)
 
 plt.semilogy(Number_of_Training_Pts, L2_error, 'bo--',
              linewidth=2, markersize=8)
@@ -51,7 +53,7 @@ plt.semilogy(n_plot, exponential_decay(n_plot, *p_opt),
 plt.semilogy(Number_of_Training_Pts, Loss_error,
              'r+--', linewidth=2, markersize=8)
 
-plt.xlabel('n')
-plt.legend([r'$L^2$ norm', r'$O(e^{-n})$',r'$\mathcal{L}\Psi_t-f$'])
-plt.title('Convergence w.r.t. the number of training points')
+plt.xlabel('n', fontsize=15)
+plt.legend([r'$L^2$ norm', r'$O(e^{-c\sqrt{n}})$',r'$\mathcal{L}\varphi_t-f$'], fontsize=12)
+plt.title('Convergence w.r.t. # of training points', fontsize=15)
 plt.show()
