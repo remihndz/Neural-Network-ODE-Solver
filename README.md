@@ -13,7 +13,7 @@ In order to solve the general differential equation:
 
 we first define an appropriate (regarding the boundary conditions) trial function:  
 <p align="center">
-<img src="https://latex.codecogs.com/png.latex?%5Cdpi%7B100%7D%20%5Clarge%20%5CLarge%20%5Cvarphi%28%5Cvec%20x%29%20%3D%20A%28%5Cvec%20x%29%20&plus;%20B%28%5Cvec%20x%29%5CPsi%28%5Cvec%20x%29">
+<img src="https://latex.codecogs.com/png.latex?%5Cdpi%7B100%7D%20%5Clarge%20%5CLarge%20%5Cphi%28%5Cvec%20x%29%20%3D%20A%28%5Cvec%20x%29%20&plus;%20B%28%5Cvec%20x%29%5CPsi%28%5Cvec%20x%29">
 </p>
 where A is taken to satisfy the boundary conditions exactly and B is zero on the boundary. The function Ψ is the output of a neural network.   
 For a discrete set of points S in Ω, the network's parameters σ are trained to minimize:  
