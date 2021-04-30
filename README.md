@@ -1,5 +1,5 @@
 # Neural Network Solver for Differential Equations
-======
+
 
 ## Presentation of the method
 ------
@@ -38,10 +38,16 @@ To evaluate this, we use both the *L<sup>2</sup>* norm of *ψ-φ* and how well *
 
 Letting *q* be the size of the (single) hidden layer in the network and *n* the number of points in the training set *S*, we suggested the following convergence rates of *q<sup>-0.5</sup>*
 <p align="center">
+![](img/Error_width.png)
+</p>
+<p align="center">
 <img src="https://github.com/remihndz/Neural-Network-ODE-Solver/blob/main/img/Error_width.png">
 </p>
 
 and *e<sup>-c√n</sup>*
+<p align="center">
+![](img/Error_training_set.png)
+</p>
 <p align="center">
 <img src=https://github.com/remihndz/Neural-Network-ODE-Solver/blob/main/img/Error_training_set.png>
 </p>
