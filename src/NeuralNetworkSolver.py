@@ -28,19 +28,31 @@ TODO:
 
 class Model:
 
-    def __init__(self, f, trial_solution, hidden_layers=(5,), max_iter=100, method='BFGS'):
+    def __init__(self, f, trial_solution, hidden_layers=(5,), max_iter=100, method='BFGS', activation='sigmoid'):
 
         self._hidden_layers = hidden_layers
         self._max_iter = max_iter
         self._f = f
         self._trial = trial_solution
         self._method=method
+        self._activation=activation
+    
+    def _activation_fun(self, x):
+        if self._activation=='sigmoid':
+            return 1.0 / (1.0 + np.exp(-x))
+        if self._activation=='tanh':
+            return np.tanh(x)
+        if self._activation=='softplus':
+            return np.log(1+np.exp(x))
         
-    def _logistic(self, x):
-        return 1.0 / (1.0 + np.exp(-x))
-    def _D_logistic(self, x):
-        return self._logistic(x)*(1.0-self._logistic(x))
-
+    def _D_activation_fun(self, x):
+        if self._activation=='sigmoid':
+            return self._activation_fun(x)*(1.0-self._activation_fun(x))
+        if self._activation=='tanh':
+            return 1./np.cosh(x)**2
+        if self._activation=='softplus':
+            return np.exp(x)/(1.+np.exp(x))
+        
     def _make_thetas(self, layers):
 
         self.thetas = []
@@ -78,7 +90,7 @@ class Model:
         theta_matrix1, theta_matrix2 = thetas
         hidden_layer = np.matmul(current_layer, theta_matrix1)
         layers.append(hidden_layer)
-        output = np.matmul(self._logistic(hidden_layer), theta_matrix2)
+        output = np.matmul(self._activation_fun(hidden_layer), theta_matrix2)
         layers.append(output)
         
         return output[0]
@@ -90,7 +102,7 @@ class Model:
         theta_matrix1, theta_matrix2 = thetas
         theta_matrix2 = np.multiply(theta_matrix1[1:].T, theta_matrix2)
         
-        hidden_layer = self._D_logistic(np.matmul(current_layer, theta_matrix1))
+        hidden_layer = self._D_activation_fun(np.matmul(current_layer, theta_matrix1))
         output = np.matmul(hidden_layer, theta_matrix2)
         
         return output

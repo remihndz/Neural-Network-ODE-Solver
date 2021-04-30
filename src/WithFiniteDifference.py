@@ -60,24 +60,65 @@ class Network:
                 current_layer = np.hstack((np.ones((rows, 1)), current_layer))
         return np.matmul(current_layer, thetas[-1])
 
+    def _Derivative(f, x, *arg, scheme='centered'):
+        '''
+        # Compute derivatives using finite difference.
+        # Asuuming |f^(i)|<M_i and eps is the machine epsilon
+           the theoretical optimal value for forward difference
+             h = (2*eps/M_2)^(1/3)
+           with eps the machine epsilon
+           for forward difference. 
+        # For centered finite difference, the optimal step is:
+             h = (6*eps/M_3)^(1/3) 
+        # For second order derivative (centered scheme):
+             h = (96*eps/M_4
+        '''
+        order = 1
+        eps = np.finfo(np.float64).eps # Machine epsilon
+        if order==1:
+            if scheme==centered:
+                h = (6.0*eps)^(1./3.)
+                fw = f(x+h, *args)
+                bw = f(x-h, *args)
+
+                return (fw-bw)/(2*h)
+            else:
+                h = (2.0*eps)**(1./3.)
+                fw = f(x+h, *args)
+                f0 = f(x, *args)
+                return (fw-f0)/h
+
+        if order==2:
+            h = (96*eps)**(0.25)
+            fw = f(x+h, *args)
+            bw = f(x-h, *args)
+            f0 = f(x, *args)
+            return (fw+bw-f0)/(h*h)                       
+
+        
     def _DNet(self, x, thetas, order=1, fdm='centered'):
         '''
         # Compute derivatives using finite difference
         # The theoretical optimal value (up to a scaling f/(f'')
-           for the step is \sqrt(4ε) with ε the machine epsilon
+           for the step is \sqrt(4*eps) with eps the machine epsilon
+           for forward difference. 
+        # For centered finite difference, the optimal step is:
+           (6eps/M_3)^(1/3) with |f^(3)|<M_3
         # 1.4901161193847656e-08 is the value used by
            scipy's minimize routine 
         '''
-        # eps = np.finfo(np.float64).eps # Machine epsilon
-        eps = 1.4901161193847656e-08 ## scipy.optimize.minimize's eps 
-        h = np.float64(2.0)*np.sqrt(eps)
+        eps = np.finfo(np.float64).eps # Machine epsilon
+        # eps = 1.4901161193847656e-08 ## scipy.optimize.minimize's eps 
+        # h = np.float64(2.0)*np.sqrt(eps)
         if order==1:
             if fdm=='centered':
+                h = (6*eps)**(1./3.)
                 f = self._Net(x-h, thetas)
-                h/=2.0
+                ff = self._Net(x+h, thetas)
+                h*=2.0
             else:
                 f = self._Net(x, thetas)
-            ff = self._Net(x+h, thetas)
+                ff = self._Net(x+h, thetas)
 
             return (ff-f)/h
 
@@ -110,6 +151,7 @@ class Network:
 
     def _cost(self, thetas, training_set):
         cost = 0.0
+        
         for x in training_set:
             phi, dphi = self._phi(x, thetas)
             cost += (dphi-self._f(x, phi))**2
@@ -121,8 +163,11 @@ class Network:
             self._make_thetas((1,)+self._hidden_layers + (1,))
             w0 = self.thetas            
 
+        eps = np.finfo(np.float64).eps # Machine epsilon
+        h = (6*eps)**(1./3.)
+        
         optimized = minimize(fun=self._cost, x0=w0, args=(training_set),
-                             method=self._method, options={'maxiter':self._max_iter})
+                             method=self._method, options={'norm':2,'maxiter':self._max_iter})
         self.thetas = optimized.x
         self.Optimized = optimized
 

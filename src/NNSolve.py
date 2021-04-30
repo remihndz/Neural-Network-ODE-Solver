@@ -63,14 +63,14 @@ training_set = np.linspace(Interval[0], Interval[1], Number_of_Training_Points)
 Sol = Solution(x)
 
 
-model = Model(f = F, trial_solution = Trial, hidden_layers=architecture, max_iter=max_iter)
+model = Model(f = F, trial_solution = Trial, hidden_layers=architecture, max_iter=max_iter, activation='softplus')
 model.fit(training_set)
 Approx, DApprox = model.phi(x)
 
 Approx = np.array(Approx).reshape((x.shape))
 DApprox = np.array(DApprox).reshape((x.shape))
 
-fig = plt.figure()
+fig = plt.figure(figsize=((12,10)))
 
 ax1 = fig.add_subplot(211)
 plt.plot(x,Approx, label="Numerical")
