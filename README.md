@@ -36,8 +36,12 @@ Solving the minimization problem can be problematic because of the presence of l
 In abscence of theoretical results for the method, we want to empirically investigate if and how the trial function's accuracy converges to the analytical solution, *ψ*. For this purpose, we set a test problem of which we know the solution and compare it with the numerical solution, *φ*.
 To evaluate this, we use both the *L<sup>2</sup>* norm of *ψ-φ* and how well *φ* satisfies the equation, namely *J(θ)*.
 
-Letting *q* be the size of the (single) hidden layer in the network and *n* the number of points in the training set *S*, we suggested the following convergence rates: 
+Letting *q* be the size of the (single) hidden layer in the network and *n* the number of points in the training set *S*, we suggested the following convergence rates of *q<sup>-0.5</sup>*
 <p align="center">
-![*q<sup>-0.5</sup>*](https://github.com/remihndz/Neural-Network-ODE-Solver/blob/main/img/Error_width.png)
-![*e<sup>-c√n</sup>*](https://github.com/remihndz/Neural-Network-ODE-Solver/blob/main/img/Error_training_set.png)
+![alt text](https://github.com/remihndz/Neural-Network-ODE-Solver/blob/main/img/Error_width.png)
+</p>
+
+and *e<sup>-c√n</sup>*
+<p align="center">
+![alt text](https://github.com/remihndz/Neural-Network-ODE-Solver/blob/main/img/Error_training_set.png)
 </p>
