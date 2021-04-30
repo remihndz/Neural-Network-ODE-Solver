@@ -18,7 +18,7 @@ In order to solve the general differential equation:
 
 we first define an appropriate (regarding the boundary conditions) trial function:  
 <p align="center">
-<img src="https://latex.codecogs.com/svg.image?ϕ(\mathbf&space;x,θ)&space;=&space;A(\mathbf&space;x)&space;&plus;&space;B(\mathbf&space;x)Φ(\mathbf&space;x,&space;θ)" title="ϕ(\mathbf x,θ) = A(\mathbf x) + B(\mathbf x)Φ(\mathbf x, θ)"/>
+<img src="https://latex.codecogs.com/svg.image?ϕ(\mathbf&space;x,θ)&space;=&space;A(\mathbf&space;x)&space;&plus;&space;B(\mathbf&space;x)Φ(\mathbf&space;x,&space;θ)" title="ϕ(\mathbf x,θ) = A(\mathbf x) + B(\mathbf x)Φ(\mathbf x, θ)">
 </p>
 where *A* is taken to satisfy the boundary conditions exactly and *B* is zero on the boundary. The function *Φ* is the output of a neural network.   
 For a discrete set of points S in Ω, the network's parameters σ are trained to minimize:  
