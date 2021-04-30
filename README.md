@@ -1,4 +1,9 @@
 # Neural Network Solver for Differential Equations
+======
+
+## Presentation of the method
+------
+
 Implementation of the solver of differential equations presented by Lagaris et. al. ([see original paper](https://doi.org/10.1109/72.712178)).  
 This method has the advantages of:
   * providing a meshless solution to ordinary and partial differential equations;
@@ -18,7 +23,19 @@ we first define an appropriate (regarding the boundary conditions) trial functio
 where A is taken to satisfy the boundary conditions exactly and B is zero on the boundary. The function Ψ is the output of a neural network.   
 For a discrete set of points S in Ω, the network's parameters σ are trained to minimize:  
 <p align="center">
-<img src="https://latex.codecogs.com/png.latex?%5Cdpi%7B100%7D%20%5Clarge%20%5CLarge%20J%28%5Csigma%29%20%3D%20%5Csum_%7B%5Cvec%20x%5Cin%20S%7D%20G%28%5Cvec%20x%2C%20%5Cphi%28%5Cvec%20x%29%2C%20%5Cnabla%5Cphi%28%5Cvec%20x%29%2C%20%5Cnabla%5E2%5Cphi%28%5Cvec%20x%29%29%5E2">
+<img src="https://latex.codecogs.com/png.latex?%5Cdpi%7B100%7D%20%5Clarge%20%5CLarge%20J%28%5Ctheta%29%20%3D%20%5Csum_%7B%5Cvec%20x%5Cin%20S%7D%20G%28%5Cvec%20x%2C%20%5Cphi%28%5Cvec%20x%29%2C%20%5Cnabla%5Cphi%28%5Cvec%20x%29%2C%20%5Cnabla%5E2%5Cphi%28%5Cvec%20x%29%29%5E2">
 </p>
 
 Solving the minimization problem can be problematic because of the presence of local minima. For more complicated problem or better accuracy, a random walk on the parameter space for the initial guess may be useful to prevent falling in such pitfall.
+
+
+## Investigation of the (hyper-)parameters
+-----
+
+In abscence of theoretical results for the method, we want to empirically investigate if and how the trial function's accuracy converges to the analytical solution, *ψ*. For this purpose, we set a test problem of which we know the solution and compare it with the numerical solution, *φ*.
+To evaluate this, we use both the *L<sup>2</sup>* norm of *ψ-φ* and how well *φ* satisfies the equation, namely *J(θ)*.
+
+Letting *q* be the size of the (single) hidden layer in the network and *n* the number of points in the training set *S*, we suggested the convergence rate of *q<sup>-0.5</sup>*
+![alt text](https://github.com/remihndz/Neural-Network-ODE-Solver/blob/main/img/Error_width.png)
+
+and *e<sup>-c√n</sup>* ![alt text](https://github.com/remihndz/Neural-Network-ODE-Solver/blob/main/img/Errorₜrainingₛet.png)
