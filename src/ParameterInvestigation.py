@@ -39,14 +39,16 @@ print('========================================\nInvestigating the width of the 
 L2_error = [] # for ||phi_t-phi_a||
 Loss_error = [] # for Loss function
 
-N_Init = 30 # Number of random initialisation of the parameter guess for fitting 
+N_Init = 30 # Number of random initialisation of the parameter guess for fitting
+reg = 0     # L2 penalization for the weigths
+
 width = [2,5,8,10,15,20,30]
 for q in width:
 
     print('Training with q = {}....'.format(q))
     
     layers = (q,)
-    model = Model(f = F, trial_solution = Trial, hidden_layers=layers, max_iter=max_iter)
+    model = Model(f = F, trial_solution = Trial, Layers=layers, max_iter=max_iter, reg=reg)
 
     # Try fitting with different initial guesses
     # to avoid local minima
@@ -123,7 +125,7 @@ q = 20 # Size of hidden layer
 
 # Build the network
 layers = (q,)
-model = Model(f = F, trial_solution = Trial, hidden_layers=layers, max_iter=max_iter)
+model = Model(f = F, trial_solution = Trial, Layers=layers, max_iter=max_iter, reg=reg)
 
 # thetas_container = []
 L2_error = []

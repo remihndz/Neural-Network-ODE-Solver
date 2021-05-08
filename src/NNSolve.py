@@ -49,10 +49,10 @@ Optionnal arguments are:
 
 
 Problem_number = 2
-Number_of_Training_Points = 50
+Number_of_Training_Points = 40
 
-architecture = (20,)
-max_iter = 100
+Layers = (20,)
+max_iter = 30
 
 
 Problem  = Problems[Problem_number]
@@ -62,50 +62,16 @@ x = np.linspace(Interval[0], Interval[1], 1000)
 training_set = np.linspace(Interval[0], Interval[1], Number_of_Training_Points)
 Sol = Solution(x)
 
+# Compare accuracy for different L2 regularization coefficients 
+NoReg = Model(F, Trial, Layers, max_iter=max_iter, activation='sigmoid', reg=0)
+Reg1  = Model(F, Trial, Layers, max_iter=max_iter, activation='sigmoid', reg=0.5)
+Reg2  = Model(F, Trial, Layers, max_iter=max_iter, activation='sigmoid', reg=2.0)
 
-model = Model(f = F, trial_solution = Trial, hidden_layers=architecture, max_iter=max_iter, activation='softplus')
-model.fit(training_set)
-Approx, DApprox = model.phi(x)
+NoReg.fit(training_set)
+Reg1.fit(training_set)
+Reg2.fit(training_set)
 
-Approx = np.array(Approx).reshape((x.shape))
-DApprox = np.array(DApprox).reshape((x.shape))
-
-fig = plt.figure(figsize=((12,10)))
-
-ax1 = fig.add_subplot(211)
-plt.plot(x,Approx, label="Numerical")
-plt.plot(x,Sol, label="Analytical")
-E = abs(Approx-Sol)**2
-L2_norm = np.sum(E)
-H2_norm = L2_norm
-ax1.title.set_text("L2 error on solution: {}".format(np.sqrt(L2_norm)))
-plt.legend()
-
-# Compute derivatives of analytical solution and
-# network's solution (for comparison purpose)
-# using finite differences
-h = np.finfo(np.float64).eps
-h = 2.0*np.sqrt(h)
-dSol = (Solution(x+h)-Solution(x-h))/(2*h)
-
-FD_Approx, _ = model.phi(x+h)
-FD_Approx = (FD_Approx -Approx)/h
-
-Derivative_Discrepancy = np.sum((FD_Approx - DApprox)**2)
-
-ax2 = fig.add_subplot(212)
-plt.plot(x,DApprox, label="Derivative of network's solution")
-plt.plot(x,FD_Approx, label="Derivative by finite difference") 
-plt.plot(x,dSol, label="Analytical")
-E = abs(DApprox-dSol)**2
-L2_norm = np.sum(E)
-ax2.title.set_text("L2 error on derivative estimates: {}".format(np.sqrt(Derivative_Discrepancy)))
-                                                                         
-
-H2_norm += L2_norm
-plt.suptitle("H2 error: {}\nSolver residual: {}".format(H2_norm, model.Optimized.fun))
-plt.legend()
-
-plt.show()
-print(model.Optimized)
+NoRegPhi, _ = NoReg.phi(x)
+Reg1Phi, _ = Reg1.phi(x)
+Reg2Phi, _ = Reg2.phi(x)
 
