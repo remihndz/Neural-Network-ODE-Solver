@@ -25,7 +25,7 @@ F, Trial, Solution, Interval = Problem
 x = np.linspace(Interval[0], Interval[1], 1000)
 training_set = np.linspace(Interval[0], Interval[1], Number_of_Training_Points)
 Phi_a = Solution(x)
-
+Norm_Phi_a = np.sum(Phi_a**2)
 
 
 '''
@@ -39,10 +39,10 @@ print('========================================\nInvestigating the width of the 
 L2_error = [] # for ||phi_t-phi_a||
 Loss_error = [] # for Loss function
 
-N_Init = 30 # Number of random initialisation of the parameter guess for fitting
+N_Init = 10 # Number of random initialisation of the parameter guess for fitting
 reg = 0     # L2 penalization for the weigths
 
-width = [2,5,8,10,15,20,30]
+width = [2,8,10,15]#,20,30]
 for q in width:
 
     print('Training with q = {}....'.format(q))
@@ -64,7 +64,7 @@ for q in width:
         losses_container.append(model.residual)
 
         Phi_t, _ = model.phi(x)
-        L2_norm = np.sqrt(np.sum(np.abs(Phi_t-Phi_a)**2))
+        L2_norm = np.sqrt(np.sum(np.abs(Phi_t-Phi_a)**2))/Norm_Phi_a
         errors_container.append(L2_norm)
 
     best_fit = min(losses_container)
@@ -75,7 +75,7 @@ for q in width:
 
 
 
-# Comparison with theoretical value
+## Comparison with theoretical value
 #plt.subplot(2,1,1)
 plt.semilogy(width, L2_error, 'bo--', linewidth=2, markersize=8)
 q_plot = np.linspace(width[0]-1, max(width)+1,100)
@@ -87,10 +87,10 @@ p_opt, _ = curve_fit(theoretical_convergence_rate, width, L2_error)
 error_th = theoretical_convergence_rate(q_plot, p_opt[0], p_opt[1])
 plt.semilogy(q_plot, error_th, 'k', linewidth=2)
 plt.legend([r'Neural network solver', r'Theoretical $O(q^{-1/2})$'])
-plt.title(r'$||\Psi_t-\Psi_a||_{L^2}$')
+plt.title(r'$||\Psi_t-\Psi_a||_{L^2}$, normalized')
 plt.xlabel('q')
 
-# Accuracy w.r.t. the differential operator
+## Accuracy w.r.t. the differential operator
 # plt.subplot(2,1,2)
 # plt.semilogy(width, Loss_error, 'bo--', linewidth=2, markersize=12)
 # plt.xlabel('q')
@@ -120,7 +120,7 @@ plt.show()
 '''
 print('\n\n========================================\nInvestigating the number of training points\n========================================')
 
-Number_of_Training_Pts = [5,10,15,20,30,50]
+Number_of_Training_Pts = [5,10,15,20,30]
 q = 20 # Size of hidden layer
 
 # Build the network
@@ -149,7 +149,7 @@ for n in Number_of_Training_Pts:
         losses_container.append(model.residual)
 
         Phi_t, _ = model.phi(x)
-        L2_norm = np.sqrt(np.sum(np.abs(Phi_t-Phi_a)**2))
+        L2_norm = np.sqrt(np.sum(np.abs(Phi_t-Phi_a)**2))/Norm_Phi_a
         errors_container.append(L2_norm)
 
     best_fit = min(losses_container)
@@ -164,7 +164,7 @@ plt.semilogy(Number_of_Training_Pts, Loss_error,
              'r+--', linewidth=2, markersize=8)
 
 plt.xlabel('# of training points')
-plt.legend([r'$L^2$ norm', r'$\mathcal{L}\Psi_t-f$'])
+plt.legend([r'Normalized $L^2$ norm', r'$\mathcal{L}\Psi_t-f$'])
 plt.title('Convergence w.r.t the number of training points')
 plt.show()
 

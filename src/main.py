@@ -57,14 +57,14 @@ Training_Pts = 30
 Layers       = (20,)
 max_iter     = 30
 Training_Set = np.linspace(Interval[0], Interval[1], Training_Pts)
-Regs = [0, 0.5, 1, 5, 10, 20, 50]    # Regularization parameter
+Regs = [0, 0.5, 1, 5]    # Regularization parameter
 
 
 
 # To be compared with the numerical solution
 x = np.linspace(Interval[0], Interval[1], 1000)
 Sol = Solution(x)               # Exact Solution
-
+NormSol = np.sum(Sol**2)
 
 
 
@@ -82,11 +82,10 @@ for reg in Regs:
     Phi, _ = Net.phi(x)
     
     Phis.append(Phi)
-    E = (Phi-Sol)**2
+    E = (Phi-Sol)**2/NormSol
     PtWise_Squared_Error.append(E)
-    L2_Error.append(np.sum(E)/x.size)
+    L2_Error.append(np.sum(E))
     Legend.append(r'$\lambda$ = {}'.format(reg))
-
 
 
 gs = gridspec.GridSpec(2,2)
@@ -115,7 +114,7 @@ ticks.extend(Regs)
 ticks.append('')
 plt.xticks(locs, ticks)
 plt.xlabel(r'$\lambda$')
-plt.title(r'$L^2$ norm of the error function')
+plt.title(r'Normalized $L^2$ norm of the error function')
 plt.legend()
 
 plt.show()

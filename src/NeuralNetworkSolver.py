@@ -28,7 +28,7 @@ TODO:
 
 class Model:
 
-    def __init__(self, f, trial_solution, Layers=(5,), max_iter=100, method='BFGS', activation='sigmoid', reg=2):
+    def __init__(self, f, trial_solution, Layers=(5,), max_iter=100, method='BFGS', activation='sigmoid', reg=0):
 
         self._Layers = Layers # Architecture of the network
         self._max_iter = max_iter           # Max iterations of the minimizing algo
@@ -36,7 +36,7 @@ class Model:
         self._trial = trial_solution        # phi = A(x) + B(x)N(x,theta)
         self._method=method                 # Solver
         self._activation=activation         # Activation function 
-        self._reg = 0                       # Regularization parameter (L2 weight penalization)
+        self._reg = reg                     # Regularization parameter (L2 weight penalization)
     
     def _activation_fun(self, x):
         if self._activation=='sigmoid':
@@ -129,9 +129,9 @@ class Model:
         N = 0
         for x in training_set:
             phi,dphi = self._phi(x,thetas)
-            cost += (dphi-self._f(x,phi))**2
+            cost += np.log(np.cosh((dphi-self._f(x,phi))))
             N+=1
-        return 1.0/N*cost + self._reg*np.dot(thetas, thetas)
+        return cost + self._reg*np.dot(thetas, thetas)
 
     def fit(self, training_set):
         self._make_thetas((1,)+self._Layers + (1,))
